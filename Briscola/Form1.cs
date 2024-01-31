@@ -277,6 +277,13 @@ namespace Briscola
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (testEnable)
+            {
+                label1.Visible = true; 
+                label2.Visible = true; 
+                label3.Visible = true;
+            }
+
             for (int i = 0; i < pathCards.Count; i++)
             {
                 Card card = new Card(pathCards.ElementAt(i));
