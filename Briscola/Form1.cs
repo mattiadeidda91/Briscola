@@ -96,20 +96,20 @@ namespace Briscola
 
         #endregion
 
-        public void EnablePictureBox(bool abilita)
+        public void EnablePictureBox(bool isEnabled)
         {
-            pictureBoxIo1.Enabled = abilita;
-            pictureBoxIo2.Enabled = abilita;
-            pictureBoxIo3.Enabled = abilita;
+            pictureBoxIo1.Enabled = isEnabled;
+            pictureBoxIo2.Enabled = isEnabled;
+            pictureBoxIo3.Enabled = isEnabled;
         }
 
-        public bool CheckHandWinningPlayer(Card vincente)
+        public bool CheckHandWinningPlayer(Card winnerCard)
         {
             bool playerWinner = false;
 
             foreach (Card card in playerCards)
             {
-                if (card == vincente)
+                if (card == winnerCard)
                 {
                     playerWinner = true;
                 }
@@ -358,47 +358,47 @@ namespace Briscola
 
             EnablePictureBox(false);
 
-            Card giocatore = DeterminePlayerCard(box);
-            Card avv = Dealer.OpponentHandResponse(giocatore, opponentCards, briscolaSeed);
+            Card player = DeterminePlayerCard(box);
+            Card opponent = Dealer.OpponentHandResponse(player, opponentCards, briscolaSeed);
 
-            labelOpponent = DetermineOpponentLabel(avv);
+            labelOpponent = DetermineOpponentLabel(opponent);
             labelOpponent.Visible = false;
 
-            PictureBox boxAvv = DetermineOpponentCard(avv);
-            boxAvv.Top = boxAvv.Location.Y + 50;
+            PictureBox opponentBox = DetermineOpponentCard(opponent);
+            opponentBox.Top = opponentBox.Location.Y + 50;
 
-            Card vincente = Dealer.CalculateWinningCard(avv, giocatore, briscolaSeed);
+            Card winnerCard = Dealer.CalculateWinningCard(opponent, player, briscolaSeed);
 
-            isPlayerWinner = CheckHandWinningPlayer(vincente);
+            isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-            AddPointsPlayer(isPlayerWinner, giocatore, avv);
+            AddPointsPlayer(isPlayerWinner, player, opponent);
 
             _ = await Wait();
 
             box.Top = box.Location.Y + 50;
-            boxAvv.Top = boxAvv.Location.Y - 50;
+            opponentBox.Top = opponentBox.Location.Y - 50;
 
             labelOpponent.Visible = true;
 
             if (isPlayerWinner)
             {
-                Card Io = deck.GetCard(deck);
+                Card me = deck.GetCard(deck);
 
-                PutPlayerCardInHand(box, Io);
+                PutPlayerCardInHand(box, me);
 
-                Card avversario = deck.GetCard(deck);
+                Card opp = deck.GetCard(deck);
 
-                PutCardInOpponentHand(boxAvv, avversario);
+                PutCardInOpponentHand(opponentBox, opp);
             }
             else
             {
-                Card avversario = deck.GetCard(deck);
+                Card opp = deck.GetCard(deck);
 
-                PutCardInOpponentHand(boxAvv, avversario);
+                PutCardInOpponentHand(opponentBox, opp);
 
-                Card Io = deck.GetCard(deck);
+                Card me = deck.GetCard(deck);
 
-                PutPlayerCardInHand(box, Io);
+                PutPlayerCardInHand(box, me);
 
                 opponentPlayedCard = Dealer.StartOpponentHand(opponentCards, briscolaSeed);
 
@@ -423,13 +423,13 @@ namespace Briscola
 
                 EnablePictureBox(false);
 
-                Card giocatore = DeterminePlayerCard(box);
+                Card player = DeterminePlayerCard(box);
 
-                Card vincente = Dealer.CalculateWinningCard(giocatore, opponentPlayedCard, briscolaSeed);
+                Card winnerCard = Dealer.CalculateWinningCard(player, opponentPlayedCard, briscolaSeed);
 
-                isPlayerWinner = CheckHandWinningPlayer(vincente);
+                isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-                AddPointsPlayer(isPlayerWinner, giocatore, opponentPlayedCard);
+                AddPointsPlayer(isPlayerWinner, player, opponentPlayedCard);
 
                 _ = await Wait();
 
@@ -440,25 +440,25 @@ namespace Briscola
 
                 if (isPlayerWinner)
                 {
-                    Card Io = deck.GetCard(deck);
+                    Card me = deck.GetCard(deck);
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
-                    Card avversario = briscolaCard;
+                    Card opp = briscolaCard;
 
-                    PutCardInOpponentHand(opponentNextHandBox, avversario);
+                    PutCardInOpponentHand(opponentNextHandBox, opp);
 
                     pictureBoxBriscola.Visible = false;
                 }
                 else
                 {
-                    Card avversario = deck.GetCard(deck);
+                    Card opp = deck.GetCard(deck);
 
-                    PutCardInOpponentHand(opponentNextHandBox, avversario);
+                    PutCardInOpponentHand(opponentNextHandBox, opp);
 
-                    Card Io = briscolaCard;
+                    Card me = briscolaCard;
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
                     pictureBoxBriscola.Visible = false;
 
@@ -555,15 +555,15 @@ namespace Briscola
 
                 EnablePictureBox(false);
 
-                Card giocatore = DeterminePlayerCard(box);
+                Card player = DeterminePlayerCard(box);
 
-                Card vincente = Dealer.CalculateWinningCard(giocatore, opponentPlayedCard, briscolaSeed);
+                Card winnerCard = Dealer.CalculateWinningCard(player, opponentPlayedCard, briscolaSeed);
 
                 opponentCardsPlayedLastHand.Add(opponentPlayedCard);
 
-                isPlayerWinner = CheckHandWinningPlayer(vincente);
+                isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-                AddPointsPlayer(isPlayerWinner, giocatore, opponentPlayedCard);
+                AddPointsPlayer(isPlayerWinner, player, opponentPlayedCard);
 
                 _ = await Wait();
 
@@ -609,30 +609,30 @@ namespace Briscola
 
                 EnablePictureBox(false);
 
-                Card giocatore = DeterminePlayerCard(box);
+                Card player = DeterminePlayerCard(box);
 
-                Card avv = Dealer.OpponentHandResponse(giocatore, playerCards, opponentCards, opponentCardsPlayedLastHand, briscolaSeed, hand);
+                Card opponent = Dealer.OpponentHandResponse(player, playerCards, opponentCards, opponentCardsPlayedLastHand, briscolaSeed, hand);
 
-                opponentCardsPlayedLastHand.Add(avv);
+                opponentCardsPlayedLastHand.Add(opponent);
 
-                labelOpponent = DetermineOpponentLabel(avv);
+                labelOpponent = DetermineOpponentLabel(opponent);
                 labelOpponent.Visible = false;
 
-                PictureBox boxAvv = DetermineOpponentCard(avv);
-                boxAvv.Top = boxAvv.Location.Y + 50;
+                PictureBox opponentBox = DetermineOpponentCard(opponent);
+                opponentBox.Top = opponentBox.Location.Y + 50;
 
-                Card vincente = Dealer.CalculateWinningCard(avv, giocatore, briscolaSeed);
+                Card winnerCard = Dealer.CalculateWinningCard(opponent, player, briscolaSeed);
 
-                isPlayerWinner = CheckHandWinningPlayer(vincente);
+                isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-                AddPointsPlayer(isPlayerWinner, giocatore, avv);
+                AddPointsPlayer(isPlayerWinner, player, opponent);
 
                 _ = await Wait();
 
                 box.Top = box.Location.Y + 50;
-                boxAvv.Top = boxAvv.Location.Y - 50;
+                opponentBox.Top = opponentBox.Location.Y - 50;
                 box.Visible = false;
-                boxAvv.Visible = false;
+                opponentBox.Visible = false;
 
                 labelOpponent.Visible = false;
 
@@ -657,7 +657,7 @@ namespace Briscola
                         labelOpponent.Visible = false;
 
                         opponentNextHandBox = DetermineOpponentCard(opponentPlayedCard);
-                        opponentNextHandBox.Top = boxAvv.Location.Y + 50;
+                        opponentNextHandBox.Top = opponentBox.Location.Y + 50;
                     }
                 }
 
@@ -675,13 +675,13 @@ namespace Briscola
 
                 EnablePictureBox(false);
 
-                Card giocatore = DeterminePlayerCard(box);
+                Card player = DeterminePlayerCard(box);
 
-                Card vincente = Dealer.CalculateWinningCard(giocatore, opponentPlayedCard, briscolaSeed);
+                Card winnerCard = Dealer.CalculateWinningCard(player, opponentPlayedCard, briscolaSeed);
 
-                isPlayerWinner = CheckHandWinningPlayer(vincente);
+                isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-                AddPointsPlayer(isPlayerWinner, giocatore, opponentPlayedCard);
+                AddPointsPlayer(isPlayerWinner, player, opponentPlayedCard);
 
                 _ = await Wait();
 
@@ -692,23 +692,23 @@ namespace Briscola
 
                 if (isPlayerWinner)
                 {
-                    Card Io = deck.GetCard(deck);
+                    Card me = deck.GetCard(deck);
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
-                    Card avversario = deck.GetCard(deck);
+                    Card opp = deck.GetCard(deck);
 
-                    PutCardInOpponentHand(opponentNextHandBox, avversario);
+                    PutCardInOpponentHand(opponentNextHandBox, opp);
                 }
                 else
                 {
-                    Card avversario = deck.GetCard(deck);
+                    Card opp = deck.GetCard(deck);
 
-                    PutCardInOpponentHand(opponentNextHandBox, avversario);
+                    PutCardInOpponentHand(opponentNextHandBox, opp);
 
-                    Card Io = deck.GetCard(deck);
+                    Card me = deck.GetCard(deck);
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
                     opponentPlayedCard = Dealer.StartOpponentHand(opponentCards, briscolaSeed);
 
@@ -729,47 +729,47 @@ namespace Briscola
 
                 EnablePictureBox(false);
 
-                Card giocatore = DeterminePlayerCard(box);
-                Card avv = Dealer.OpponentHandResponse(giocatore, opponentCards, briscolaSeed);
+                Card player = DeterminePlayerCard(box);
+                Card opponent = Dealer.OpponentHandResponse(player, opponentCards, briscolaSeed);
 
-                labelOpponent = DetermineOpponentLabel(avv);
+                labelOpponent = DetermineOpponentLabel(opponent);
                 labelOpponent.Visible = false;
 
-                PictureBox boxAvv = DetermineOpponentCard(avv);
-                boxAvv.Top = boxAvv.Location.Y + 50;
+                PictureBox opponentBox = DetermineOpponentCard(opponent);
+                opponentBox.Top = opponentBox.Location.Y + 50;
 
-                Card vincente = Dealer.CalculateWinningCard(avv, giocatore, briscolaSeed);
+                Card winnerCard = Dealer.CalculateWinningCard(opponent, player, briscolaSeed);
 
-                isPlayerWinner = CheckHandWinningPlayer(vincente);
+                isPlayerWinner = CheckHandWinningPlayer(winnerCard);
 
-                AddPointsPlayer(isPlayerWinner, giocatore, avv);
+                AddPointsPlayer(isPlayerWinner, player, opponent);
 
                 _ = await Wait();
 
                 box.Top = box.Location.Y + 50;
-                boxAvv.Top = boxAvv.Location.Y - 50;
+                opponentBox.Top = opponentBox.Location.Y - 50;
 
                 labelOpponent.Visible = true;
 
                 if (isPlayerWinner)
                 {
-                    Card Io = deck.GetCard(deck);
+                    Card me = deck.GetCard(deck);
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
-                    Card avversario = deck.GetCard(deck);
+                    Card opp = deck.GetCard(deck);
 
-                    PutCardInOpponentHand(boxAvv, avversario);
+                    PutCardInOpponentHand(opponentBox, opp);
                 }
                 else
                 {
-                    Card avversario = deck.GetCard(deck);
+                    Card opp = deck.GetCard(deck);
 
-                    PutCardInOpponentHand(boxAvv, avversario);
+                    PutCardInOpponentHand(opponentBox, opp);
 
-                    Card Io = deck.GetCard(deck);
+                    Card me = deck.GetCard(deck);
 
-                    PutPlayerCardInHand(box, Io);
+                    PutPlayerCardInHand(box, me);
 
                     opponentPlayedCard = Dealer.StartOpponentHand(opponentCards, briscolaSeed);
 
